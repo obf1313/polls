@@ -1,5 +1,5 @@
 body {
-    background: white url("images/background.png") no-repeat;
+    background: white url("images/background.jpg") repeat;
 }
 li a {
     color: green;

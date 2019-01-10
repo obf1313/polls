@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>详情</title>
+    {% load static %}
+    <script src="{% static 'polls/js/jquery.min.js' %}"></script>
+    <script src="{% static 'polls/js/detail.js' %}"></script>
 </head>
 <body>
     <h1>{{ question.question_text }}</h1>
+    <h1>
+        <button onclick="refreshChoiceJson({{ question.id }})">刷新选项</button>
+    </h1>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
     <form action="{% url 'polls:vote' question.id %}" method="post">
     {% csrf_token %}
-    {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-    {% endfor %}
+    <div id="choice">
+        {% for choice in question.choice_set.all %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% endfor %}
+    </div>
     <input type="submit" value="Vote">
     </form>
 </body>

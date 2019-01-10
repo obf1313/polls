@@ -12,4 +12,7 @@ urlpatterns = [
 	path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
 	# ex: /polls/5/vote/
 	path('<int:question_id>/vote/', views.vote, name='vote'),
+	path('ajax/get/', views.ajax_get, name='ajaxGet'),
+	path('ajax/post/', views.ajax_post, name='ajaxPost'),
+	path('ajax/json/', views.ajax_json, name='ajaxJson'),
 ]

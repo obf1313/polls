@@ -1,8 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 
 from .models import Question, Choice
 
@@ -55,3 +57,22 @@ def vote(request, question_id):
 		selected_choice.votes += 1
 		selected_choice.save()
 	return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+
+def ajax_get(request):
+	return HttpResponse(str(request.GET))
+
+
+@csrf_exempt
+def ajax_post(request):
+	question = get_object_or_404(Question, pk=request.POST['id'])
+	return HttpResponse(question)
+
+
+# csrf_exempt是告诉你的视图不要检查csrf 标记
+@csrf_exempt
+def ajax_json(request):
+	question = get_object_or_404(Question, pk=request.POST['id'])
+	choice_list = serializers.serialize("json", question.choice_set.all())
+	print(choice_list)
+	return HttpResponse(choice_list, content_type='application/json')
